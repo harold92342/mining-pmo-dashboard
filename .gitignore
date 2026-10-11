@@ -1,0 +1,16 @@
+# Power BI
+*.pbix.bak
+.pbi/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Kaggle raw download (large; rebuild with scripts/prepare_kaggle.py)
+data/source/MiningProcess_Flotation_Plant_Database.csv
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
