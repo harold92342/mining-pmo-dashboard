@@ -1,0 +1,33 @@
+ProjectID,ProjectName,Programme,SiteID,Category,Complexity,Priority,ContractorID,DeliveryModel,StrategicAlignment,BaselineBudget_USD,PlannedStart,PlannedDurationMonths,PlannedFinish,PlannedBenefit_USD
+P001,Concentrator Flotation Optimisation,Plant Performance,S02,Debottlenecking,High,Critical,C05,EPCM,5,18000000,2025-04-01,14,2026-05-31,39400000.0
+P002,Ball Mill 2 Liner Upgrade,Plant Performance,S02,Sustaining,Medium,High,C06,Owner-managed,2,6000000,2024-10-01,8,2025-05-31,9400000.0
+P003,Concentrator Thickener Rebuild,Plant Performance,S02,Sustaining,Medium,High,C03,Contracted,5,9000000,2025-07-01,12,2026-06-30,24900000.0
+P004,Flotation Reagent System Automation,Digital & Automation,S02,Digital,Medium,Medium,C03,Contracted,4,3000000,2025-08-01,9,2026-04-30,6600000.0
+P005,SX-EW Tank House Expansion,Growth,S03,Expansion,Very High,Critical,C04,Contracted,3,85000000,2023-10-01,30,2026-03-31,260800000.0
+P006,Electrowinning Rectifier Replacement,Plant Performance,S03,Sustaining,High,High,C03,Contracted,3,14000000,2025-10-01,15,2026-12-31,30800000.0
+P007,Acid Plant Tie-in,Growth,S03,Expansion,High,High,C04,Contracted,2,22000000,2025-12-01,20,2027-07-31,52800000.0
+P008,Haul Road Upgrade Phase 2,Mine Development,S01,Infrastructure,Low,Medium,C01,Contracted,5,7000000,2026-02-01,10,2026-11-30,17800000.0
+P009,Pit Dewatering System,Mine Development,S01,Sustaining,Medium,High,C02,Contracted,5,11000000,2025-12-01,12,2026-11-30,22400000.0
+P010,Fleet Dispatch System,Digital & Automation,S01,Digital,Medium,Medium,C03,Contracted,3,4000000,2023-08-01,9,2024-04-30,11200000.0
+P011,Pushback 4 Pre-strip,Mine Development,S01,Expansion,High,Critical,C02,Contracted,2,40000000,2026-03-01,24,2028-02-29,89600000.0
+P012,Truck Workshop Extension,Mine Development,S01,Infrastructure,Low,Low,C01,Contracted,4,5000000,2024-12-01,10,2025-09-30,13100000.0
+P013,Tailings Dam Lift 3,Environment & Compliance,S04,Compliance,Very High,Critical,C04,Contracted,4,30000000,2023-11-01,22,2025-08-31,94200000.0
+P014,Tailings Seepage Interception,Environment & Compliance,S04,Compliance,High,Critical,C01,Contracted,5,8000000,2024-09-01,12,2025-08-31,18000000.0
+P015,Water Treatment Plant Upgrade,Environment & Compliance,S05,Compliance,High,High,C04,Contracted,2,16000000,2024-07-01,16,2025-10-31,26100000.0
+P016,Dust Suppression Network,Environment & Compliance,S01,Compliance,Low,Medium,C05,EPCM,3,2000000,2025-07-01,6,2025-12-31,5200000.0
+P017,120 kV Substation Upgrade,Energy & Utilities,S05,Infrastructure,Very High,Critical,C04,Contracted,3,35000000,2024-02-01,26,2026-03-31,101500000.0
+P018,Solar PV Plant 20 MW,Energy & Utilities,S05,Growth,High,High,C03,Contracted,2,28000000,2025-05-01,20,2026-12-31,81100000.0
+P019,Backup Generator Overhaul,Energy & Utilities,S05,Sustaining,Medium,Medium,C03,Contracted,5,3000000,2024-05-01,7,2024-11-30,6300000.0
+P020,Raw Water Pipeline Replacement,Energy & Utilities,S05,Sustaining,Medium,High,C02,Contracted,2,12000000,2026-03-01,14,2027-04-30,19800000.0
+P021,Camp Accommodation Block C,Site Services,S06,Infrastructure,Low,Low,C04,Contracted,2,6000000,2025-07-01,11,2026-05-31,8500000.0
+P022,Site Clinic Upgrade,Site Services,S06,Infrastructure,Low,Medium,C04,Contracted,5,2000000,2025-11-01,8,2026-06-30,5300000.0
+P023,ERP Maintenance Module Rollout,Digital & Automation,S06,Digital,High,High,C06,Owner-managed,5,5000000,2025-06-01,12,2026-05-31,11100000.0
+P024,Site-wide Network Refresh,Digital & Automation,S06,Digital,Medium,Medium,C03,Contracted,2,3000000,2024-12-01,9,2025-08-31,4800000.0
+P025,Lab Information System,Digital & Automation,S02,Digital,Medium,Medium,C06,Owner-managed,4,2000000,2023-11-01,8,2024-06-30,4500000.0
+P026,Community Road Rehabilitation,Site Services,S06,Social,Low,Medium,C01,Contracted,4,4000000,2026-01-01,9,2026-09-30,11100000.0
+P027,Primary Crusher Relocation,Growth,S02,Expansion,Very High,High,C04,Contracted,4,48000000,2025-03-01,28,2027-06-30,115500000.0
+P028,Conveyor CV-05 Replacement,Plant Performance,S02,Sustaining,Medium,High,C06,Owner-managed,3,7000000,2025-02-01,10,2025-11-30,10200000.0
+P029,Explosives Magazine Relocation,Mine Development,S01,Compliance,Low,Medium,C05,EPCM,5,3000000,2024-06-01,7,2024-12-31,6400000.0
+P030,Fire Protection System Upgrade,Environment & Compliance,S03,Compliance,Medium,High,C04,Contracted,5,5000000,2024-01-01,10,2024-10-31,9100000.0
+P031,Cobalt Hydroxide Circuit Study,Growth,S03,Study,High,Medium,C06,Owner-managed,2,2000000,2025-12-01,9,2026-08-31,0.0
+P032,Underground Exploration Decline,Growth,S01,Expansion,Very High,High,C05,EPCM,5,60000000,2026-01-01,30,2028-06-30,155500000.0

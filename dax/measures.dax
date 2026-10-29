@@ -1,0 +1,198 @@
+// ============================================================================
+// Mining PMO Portfolio Dashboard — DAX measures
+// All measures live in the Key_MeasuresPMO table.
+// ============================================================================
+
+
+// ---------------------------------------------------------------- snapshot
+// Earned-value figures are cumulative, so summing months would double count.
+// Every EV measure reads each project's LATEST report on or before the
+// snapshot date (the last date in the current filter, capped at the last
+// month that was reported).
+
+Snapshot Date =
+VAR _selected   = MAX ( 'Calendar'[Date] )
+VAR _lastReport =
+    CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ) )
+RETURN
+    MIN ( _selected, _lastReport )
+
+
+// ---------------------------------------------------------------- earned value
+EV (Latest) =
+VAR _snap = [Snapshot Date]
+RETURN
+    SUMX (
+        VALUES ( Dim_Project[ProjectID] ),
+        VAR _lastMonth =
+            CALCULATE (
+                MAX ( Fact_ProjectMonthly[MonthEnd] ),
+                REMOVEFILTERS ( 'Calendar' ),
+                Fact_ProjectMonthly[MonthEnd] <= _snap
+            )
+        RETURN
+            CALCULATE (
+                SUM ( Fact_ProjectMonthly[EV_USD] ),
+                REMOVEFILTERS ( 'Calendar' ),
+                Fact_ProjectMonthly[MonthEnd] = _lastMonth
+            )
+    )
+
+// AC (Latest), PV (Latest), BAC (Latest) and EAC (Latest) use exactly the
+// same pattern on AC_USD, PV_USD, CurrentBudget_USD and EAC_USD.
+
+AC (Latest) =
+VAR _snap = [Snapshot Date]
+RETURN
+    SUMX (
+        VALUES ( Dim_Project[ProjectID] ),
+        VAR _lastMonth =
+            CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] <= _snap )
+        RETURN
+            CALCULATE ( SUM ( Fact_ProjectMonthly[AC_USD] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] = _lastMonth )
+    )
+
+PV (Latest) =
+VAR _snap = [Snapshot Date]
+RETURN
+    SUMX (
+        VALUES ( Dim_Project[ProjectID] ),
+        VAR _lastMonth =
+            CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] <= _snap )
+        RETURN
+            CALCULATE ( SUM ( Fact_ProjectMonthly[PV_USD] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] = _lastMonth )
+    )
+
+BAC (Latest) =
+VAR _snap = [Snapshot Date]
+RETURN
+    SUMX (
+        VALUES ( Dim_Project[ProjectID] ),
+        VAR _lastMonth =
+            CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] <= _snap )
+        RETURN
+            CALCULATE ( SUM ( Fact_ProjectMonthly[CurrentBudget_USD] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] = _lastMonth )
+    )
+
+EAC (Latest) =
+VAR _snap = [Snapshot Date]
+RETURN
+    SUMX (
+        VALUES ( Dim_Project[ProjectID] ),
+        VAR _lastMonth =
+            CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] <= _snap )
+        RETURN
+            CALCULATE ( SUM ( Fact_ProjectMonthly[EAC_USD] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] = _lastMonth )
+    )
+
+CPI = DIVIDE ( [EV (Latest)], [AC (Latest)] )
+
+SPI = DIVIDE ( [EV (Latest)], [PV (Latest)] )
+
+Forecast Overrun % = DIVIDE ( [EAC (Latest)] - [BAC (Latest)], [BAC (Latest)] )
+
+Delivery Index = DIVIDE ( [CPI] + [SPI], 2 )
+
+Latest Status =
+VAR _snap = [Snapshot Date]
+VAR _last =
+    CALCULATE ( MAX ( Fact_ProjectMonthly[MonthEnd] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] <= _snap )
+RETURN
+    CALCULATE ( MAX ( Fact_ProjectMonthly[Status] ), REMOVEFILTERS ( 'Calendar' ), Fact_ProjectMonthly[MonthEnd] = _last )
+
+
+// ---------------------------------------------------------------- scope
+Scope Change Cost = SUM ( Fact_ScopeChange[BudgetChange_USD] )
+
+
+// ---------------------------------------------------------------- health & safety
+Total Man-Hours = SUM ( Fact_ManHours[ManHours] )
+
+Recordable Injuries = SUM ( Fact_SafetyIncident[IsRecordable] )
+
+// Total Recordable Injury Frequency Rate, per million hours worked
+TRIFR = DIVIDE ( [Recordable Injuries] * 1000000, [Total Man-Hours] )
+
+Stop-Work Days = SUM ( Fact_SafetyIncident[StopWorkDays] )
+
+
+// ---------------------------------------------------------------- risk
+Overdue Mitigations =
+VAR _snap = [Snapshot Date]
+RETURN
+    CALCULATE (
+        COUNTROWS ( Fact_Risk ),
+        REMOVEFILTERS ( 'Calendar' ),
+        Fact_Risk[DateRaised] <= _snap,
+        Fact_Risk[MitigationDueDate] < _snap,
+        ISBLANK ( Fact_Risk[MitigationClosedDate] ) || Fact_Risk[MitigationClosedDate] > _snap
+    )
+
+Open Mitigations =
+VAR _snap = [Snapshot Date]
+RETURN
+    CALCULATE (
+        COUNTROWS ( Fact_Risk ),
+        REMOVEFILTERS ( 'Calendar' ),
+        Fact_Risk[DateRaised] <= _snap,
+        ISBLANK ( Fact_Risk[MitigationClosedDate] ) || Fact_Risk[MitigationClosedDate] > _snap
+    )
+
+
+// ---------------------------------------------------------------- engineering & processing
+Breakdown Downtime (h) =
+CALCULATE ( SUM ( Fact_WorkOrder[DowntimeHours] ), Fact_WorkOrder[WorkType] = "Breakdown" )
+
+// Preventive jobs finished more than 7 days late, or not finished at all
+Late PM Jobs =
+CALCULATE (
+    COUNTROWS ( Fact_WorkOrder ),
+    Fact_WorkOrder[WorkType] = "Preventive",
+    Fact_WorkOrder[CompletionDelayDays] > 7 || ISBLANK ( Fact_WorkOrder[CompletionDelayDays] )
+)
+
+Avg Silica % = AVERAGE ( Fact_ProcessingDaily[% Silica Concentrate] )
+
+
+// ---------------------------------------------------------------- decide
+Projects = COUNTROWS ( Dim_Project )
+
+Value Score = AVERAGE ( Dim_Project[StrategicAlignment] )
+
+// Portfolio decision rule (thresholds are documented business rules a PMO
+// would agree with its steering committee — adjust them here).
+Decision Rule =
+VAR _v  = SELECTEDVALUE ( Dim_Project[StrategicAlignment] )
+VAR _c  = [CPI]
+VAR _s  = [SPI]
+VAR _st = [Latest Status]
+RETURN
+    IF (
+        HASONEVALUE ( Dim_Project[ProjectID] ),
+        SWITCH (
+            TRUE (),
+            _st = "Completed",                         "Closed",
+            _v >= 4 && _c >= 0.9 && _s >= 0.9,         "Accelerate",
+            _v <= 3 && ( _c < 0.75 || _s < 0.6 ),      "Terminate",
+            _v >= 4,                                   "Recover",
+            _c >= 0.85 && _s >= 0.85,                  "Sustain",
+                                                       "Pause"
+        )
+    )
+
+Action =
+SWITCH (
+    SELECTEDVALUE ( Dim_Project[Decision] ),
+    "Accelerate", "Fast-track: release contingency, add crews",
+    "Sustain",    "Continue as planned, monthly review",
+    "Recover",    "Recovery plan + weekly steering review",
+    "Pause",      "Hold new commitments, re-baseline",
+    "Terminate",  "Stop or re-scope, redeploy budget"
+)
+
+// Header of the drill-through page
+Project Title =
+VAR _p = SELECTEDVALUE ( Dim_Project[ProjectName], "Select a project: right-click it on any page → Drill through" )
+VAR _g = SELECTEDVALUE ( Dim_Project[Programme] )
+RETURN
+    IF ( ISBLANK ( _g ), _p, _p & "  ·  " & _g )

@@ -1,0 +1,28 @@
+{
+  "name": "PM Terrain Dark",
+  "dataColors": ["#C8733A", "#6E95D1", "#2BA58A", "#E0AE45", "#8E98A4", "#D0604E", "#9C7BC4", "#4FB3BF"],
+  "background": "#15243A",
+  "foreground": "#E8EDF3",
+  "tableAccent": "#C8733A",
+  "good": "#2BA58A",
+  "neutral": "#E0AE45",
+  "bad": "#D0604E",
+  "maximum": "#C8733A",
+  "center": "#E0AE45",
+  "minimum": "#15243A",
+  "textClasses": {
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 24, "color": "#FFFFFF" },
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#E8EDF3" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#E8EDF3" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#C9D3DF" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": false }],
+        "border": [{ "show": false }],
+        "dropShadow": [{ "show": false }]
+      }
+    }
+  }
+}

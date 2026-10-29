@@ -1,0 +1,32 @@
+// ============================================================================
+// Calculated table and columns
+// ============================================================================
+
+// ---------------------------------------------------------------- Calendar
+// Marked as date table. Month is sorted by MonthNum.
+Calendar =
+ADDCOLUMNS (
+    CALENDAR ( DATE ( 2023, 1, 1 ), DATE ( 2030, 12, 31 ) ),
+    "Year",      YEAR ( [Date] ),
+    "Quarter",   "Q" & QUARTER ( [Date] ),
+    "MonthNum",  MONTH ( [Date] ),
+    "Month",     FORMAT ( [Date], "mmm" ),
+    "YearMonth", FORMAT ( [Date], "yyyy-mm" ),
+    "MonthEnd",  EOMONTH ( [Date], 0 )
+)
+
+
+// ---------------------------------------------------------------- Dim_Project
+// Frozen copy of the decision rule, so the decision can be used as a slicer,
+// legend or filter (measures cannot).
+Decision = [Decision Rule]
+
+
+// ---------------------------------------------------------------- Fact_Risk
+// Status of each mitigation at the reporting snapshot (30 Sep 2026)
+Mitigation Status =
+VAR _snap = DATE ( 2026, 9, 30 )
+VAR _open =
+    ISBLANK ( Fact_Risk[MitigationClosedDate] ) || Fact_Risk[MitigationClosedDate] > _snap
+RETURN
+    IF ( NOT _open, "Closed", IF ( Fact_Risk[MitigationDueDate] < _snap, "Overdue", "Open" ) )

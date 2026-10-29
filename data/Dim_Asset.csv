@@ -1,0 +1,17 @@
+AssetID,AssetName,SiteID,AssetClass,Criticality
+A01,Flotation Column 01-03,S02,Flotation,A
+A02,Flotation Column 04-07,S02,Flotation,A
+A03,Ball Mill 1,S02,Milling,A
+A04,Ball Mill 2,S02,Milling,A
+A05,Primary Crusher,S02,Crushing,A
+A06,Conveyor CV-05,S02,Conveying,B
+A07,Slurry Pump Bank,S02,Pumping,B
+A08,Concentrate Thickener,S02,Thickening,B
+A09,EW Rectifier 1,S03,Electrical,A
+A10,SX Mixer-Settlers,S03,Process,B
+A11,Haul Truck Fleet,S01,Mobile Fleet,A
+A12,Dewatering Pumps,S01,Pumping,B
+A13,Tailings Pumps,S04,Pumping,A
+A14,Main Substation,S05,Electrical,A
+A15,Backup Generators,S05,Power Generation,B
+A16,Water Treatment Plant,S05,Water,B
